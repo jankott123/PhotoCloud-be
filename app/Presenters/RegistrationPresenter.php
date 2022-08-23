@@ -3,10 +3,20 @@
 namespace App\Presenters;
 
 use Nette;
-
+use App\Model\EntityManager;
 
 class RegistrationPresenter extends Nette\Application\UI\Presenter
 {
+
+    private $manager;
+
+    public function __construct(EntityManager $manager)
+    {
+
+        $this->manager = $manager;
+   
+    }
+
 
 
     public function actionRegisterUser(){
