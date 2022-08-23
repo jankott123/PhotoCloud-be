@@ -18,7 +18,6 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
 
   public function actionDefault()
   {
-    $x=5;
-    var_dump($_ENV['API_KEY']);
+   
   }
 }

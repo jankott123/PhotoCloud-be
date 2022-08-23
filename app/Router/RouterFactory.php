@@ -22,11 +22,10 @@ final class RouterFactory
 		$router->addRoute('render/<image>', 'Render:ViewImage');
 		$router->addRoute('login', 'Login:login');
 		$router->addRoute('loginjwt', 'Login:loginJwt');
-		$router->addRoute('register', 'Login:register');
+		$router->addRoute('register', 'Registration:registerUser');
 		$router->addRoute('activation/<email>/<activation_code>', 'Login:activation');
 		$router->addRoute('refresh', 'Login:refresh');
 		$router->addRoute('protected', 'Login:protected');
-		$router->addRoute('renew', 'Login:renew');
 		$router->addRoute('cookie', 'Login:handleCookie');
 		$router->addRoute('logout', 'Login:logOut');
 		$router->addRoute('photo/<image=1>', 'Photo:photo');

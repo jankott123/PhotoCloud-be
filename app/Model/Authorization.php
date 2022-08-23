@@ -13,10 +13,14 @@ class Authorization
 
 
     private $manager;
-    public function __construct(EntityManager $manager)
+
+    private $token;
+
+    public function __construct(EntityManager $manager, Token $token)
     {
 
         $this->manager = $manager;
+        $this->token = $token;
     }
 
     public function authorize(): int
@@ -63,24 +67,7 @@ class Authorization
             $result = $this->manager->checkId($data->data->id);
 
             $secret_key2 = $_ENV['SECRET_KEY2'];
-            $issuer_claim = "THE_ISSUER"; // this can be the servername
-            $audience_claim = "THE_AUDIENCE";
-            $issuedat_claim = time(); // issued at
-            $notbefore_claim = $issuedat_claim; //not before in seconds
-            $expire_claim = $issuedat_claim + 25000000; // expire time in seconds
-            $expire_claim2 = $issuedat_claim + 11;
-
-            $token2 = array(
-                "iss" => "$issuer_claim",
-                "aud" => $audience_claim,
-                "iat" => $issuedat_claim,
-                "nbf" => $notbefore_claim,
-                "exp" => $expire_claim2,
-                "data" => array(
-                    "id" => $result['id'],
-                    "username" => $result['username'],
-                )
-            );
+            $token2 = $token->generateAccessToken($result['id'], $result['username']);
 
             $accessToken = JWT::encode($token2, $secret_key2);
 
