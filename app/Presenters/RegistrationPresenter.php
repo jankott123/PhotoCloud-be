@@ -5,7 +5,7 @@ namespace App\Presenters;
 use Nette;
 
 
-class LoginPresenter extends Nette\Application\UI\Presenter
+class RegistrationPresenter extends Nette\Application\UI\Presenter
 {
 
 

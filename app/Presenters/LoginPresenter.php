@@ -91,7 +91,7 @@ class LoginPresenter extends Nette\Application\UI\Presenter
                 );
 
                 setcookie($refresh, $tokens['refresh'], $cookie_options);
-                setcookie($access, $tokens['acess'], $cookie_options1);
+                setcookie($access, $tokens['access'], $cookie_options1);
                 setcookie('username', $result['username'], time() + 1000000, $path = "/", $domain = "", $secure = false, $httponly = false);
 
 
@@ -104,7 +104,22 @@ class LoginPresenter extends Nette\Application\UI\Presenter
         }
     }
 
+    public function actionRefresh(): void
+    {
 
+        header("Access-Control-Allow-Origin: http://localhost:3000");
+        header('Access-Control-Allow-Credentials: true');
+
+        $httpResponse = $this->getHttpResponse();
+
+        $refreshOK = $this->authorization->refreshToken();
+
+        if (!$refreshOK) {
+            $httpResponse->setCode(Nette\Http\Response::S401_UNAUTHORIZED);
+        }
+
+        $this->sendJson("v poradku");
+    }
 
     public function actionLogOut(): void
     {

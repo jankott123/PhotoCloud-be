@@ -5,7 +5,10 @@ namespace App\Model;
 use \Firebase\JWT\JWT;
 use PDO;
 
+
 class Token
+
+
 {
 
     public function generateTokens($id, $username){

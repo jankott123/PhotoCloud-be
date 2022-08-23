@@ -67,5 +67,5 @@ services:
 	- App\Model\EntityManager
 	- App\Model\Service
 	- App\Model\StorageManager
-	- App\Model\StorageManager\Token
+	- App\Model\Token
 	security.passwords: Nette\Security\Passwords(::PASSWORD_BCRYPT, [cost: 12])

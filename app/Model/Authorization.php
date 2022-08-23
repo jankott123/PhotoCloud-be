@@ -6,7 +6,7 @@ use Nette;
 use \Firebase\JWT\JWT;
 use Nette\Utils\Json;
 use \Exception;
-
+use App\Model\Token;
 
 class Authorization
 {
@@ -67,7 +67,7 @@ class Authorization
             $result = $this->manager->checkId($data->data->id);
 
             $secret_key2 = $_ENV['SECRET_KEY2'];
-            $token2 = $token->generateAccessToken($result['id'], $result['username']);
+            $token2 = $this->token->generateAccessToken($result['id'], $result['username']);
 
             $accessToken = JWT::encode($token2, $secret_key2);
 
