@@ -1,0 +1,70 @@
+parameters:
+
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+
+session:
+	expiration: 14 days
+	cookieSamesite: None
+
+di:
+	export:
+		parameters: no
+		tags: no
+
+extensions:
+	# Common
+	nettrine.annotations: Nettrine\Annotations\DI\AnnotationsExtension
+	console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+
+
+	# Dbal
+	nettrine.dbal: Nettrine\DBAL\DI\DbalExtension
+	nettrine.dbal.console: Nettrine\DBAL\DI\DbalConsoleExtension(%consoleMode%)
+
+	# Orm
+	nettrine.orm: Nettrine\ORM\DI\OrmExtension
+	nettrine.orm.annotations: Nettrine\ORM\DI\OrmAnnotationsExtension
+	nettrine.orm.cache: Nettrine\ORM\DI\OrmCacheExtension
+	nettrine.orm.console: Nettrine\ORM\DI\OrmConsoleExtension(%consoleMode%)
+	
+
+	
+	nettrine.cache: Nettrine\Cache\DI\CacheExtension
+
+includes:
+	- credentialsDb.neon
+
+
+
+nettrine.orm:
+	configuration:
+		autoGenerateProxyClasses: %debugMode%
+
+nettrine.orm.annotations:
+	mapping:
+		App\Model\Entity: %appDir%/Model/Entity
+
+console:
+	name: Acme Project
+	version: '1.0'
+	catchExceptions: false
+	autoExit:  false
+	url: https://contributte.org
+	lazy: false
+
+services:
+	- App\Router\RouterFactory::createRouter
+	- App\Model\Authorization
+	- App\Model\PhotoModel
+	- App\Model\AlbumModel
+	- App\Model\Entity\Fotka
+	- App\Model\Entity\User
+	- App\Model\EntityManager
+	- App\Model\Service
+	- App\Model\StorageManager
+	security.passwords: Nette\Security\Passwords(::PASSWORD_BCRYPT, [cost: 12])

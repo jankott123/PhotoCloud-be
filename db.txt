@@ -1,0 +1,318 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.1
+-- Dumped by pg_dump version 14.1
+
+-- Started on 2022-08-22 11:59:38 CEST
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 213 (class 1259 OID 16506)
+-- Name: album; Type: TABLE; Schema: public; Owner: jan
+--
+
+CREATE TABLE public.album (
+    id integer NOT NULL,
+    name character varying(50) NOT NULL,
+    date timestamp(0) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    userid integer
+);
+
+
+ALTER TABLE public.album OWNER TO jan;
+
+--
+-- TOC entry 210 (class 1259 OID 16488)
+-- Name: fotka; Type: TABLE; Schema: public; Owner: jan
+--
+
+CREATE TABLE public.fotka (
+    id integer NOT NULL,
+    id_user integer,
+    id_album integer,
+    filename character varying(300) NOT NULL
+);
+
+
+ALTER TABLE public.fotka OWNER TO jan;
+
+--
+-- TOC entry 209 (class 1259 OID 16487)
+-- Name: fotka_id_seq; Type: SEQUENCE; Schema: public; Owner: jan
+--
+
+CREATE SEQUENCE public.fotka_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.fotka_id_seq OWNER TO jan;
+
+--
+-- TOC entry 3613 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: fotka_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: jan
+--
+
+ALTER SEQUENCE public.fotka_id_seq OWNED BY public.fotka.id;
+
+
+--
+-- TOC entry 212 (class 1259 OID 16497)
+-- Name: user; Type: TABLE; Schema: public; Owner: jan
+--
+
+CREATE TABLE public."user" (
+    id integer NOT NULL,
+    username character varying(50) NOT NULL,
+    password character varying(500) NOT NULL,
+    email character varying(100) NOT NULL,
+    activation_code character varying(50) DEFAULT NULL::character varying
+);
+
+
+ALTER TABLE public."user" OWNER TO jan;
+
+--
+-- TOC entry 211 (class 1259 OID 16496)
+-- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: jan
+--
+
+CREATE SEQUENCE public.user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_id_seq OWNER TO jan;
+
+--
+-- TOC entry 3614 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: jan
+--
+
+ALTER SEQUENCE public.user_id_seq OWNED BY public."user".id;
+
+
+--
+-- TOC entry 215 (class 1259 OID 16514)
+-- Name: useralb; Type: TABLE; Schema: public; Owner: jan
+--
+
+CREATE TABLE public.useralb (
+    id integer NOT NULL,
+    id_user integer,
+    id_album integer
+);
+
+
+ALTER TABLE public.useralb OWNER TO jan;
+
+--
+-- TOC entry 214 (class 1259 OID 16513)
+-- Name: useralb_id_seq; Type: SEQUENCE; Schema: public; Owner: jan
+--
+
+CREATE SEQUENCE public.useralb_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.useralb_id_seq OWNER TO jan;
+
+--
+-- TOC entry 3615 (class 0 OID 0)
+-- Dependencies: 214
+-- Name: useralb_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: jan
+--
+
+ALTER SEQUENCE public.useralb_id_seq OWNED BY public.useralb.id;
+
+
+--
+-- TOC entry 3445 (class 2604 OID 16491)
+-- Name: fotka id; Type: DEFAULT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public.fotka ALTER COLUMN id SET DEFAULT nextval('public.fotka_id_seq'::regclass);
+
+
+--
+-- TOC entry 3446 (class 2604 OID 16500)
+-- Name: user id; Type: DEFAULT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_id_seq'::regclass);
+
+
+--
+-- TOC entry 3449 (class 2604 OID 16517)
+-- Name: useralb id; Type: DEFAULT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public.useralb ALTER COLUMN id SET DEFAULT nextval('public.useralb_id_seq'::regclass);
+
+
+--
+-- TOC entry 3457 (class 2606 OID 16511)
+-- Name: album album_pkey; Type: CONSTRAINT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public.album
+    ADD CONSTRAINT album_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3451 (class 2606 OID 16493)
+-- Name: fotka fotka_pkey; Type: CONSTRAINT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public.fotka
+    ADD CONSTRAINT fotka_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3455 (class 2606 OID 16505)
+-- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3463 (class 2606 OID 16519)
+-- Name: useralb useralb_pkey; Type: CONSTRAINT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public.useralb
+    ADD CONSTRAINT useralb_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3459 (class 1259 OID 16520)
+-- Name: idx_1d8f4a7f6b3ca4b; Type: INDEX; Schema: public; Owner: jan
+--
+
+CREATE INDEX idx_1d8f4a7f6b3ca4b ON public.useralb USING btree (id_user);
+
+
+--
+-- TOC entry 3460 (class 1259 OID 16521)
+-- Name: idx_1d8f4a7fd71d2f73; Type: INDEX; Schema: public; Owner: jan
+--
+
+CREATE INDEX idx_1d8f4a7fd71d2f73 ON public.useralb USING btree (id_album);
+
+
+--
+-- TOC entry 3458 (class 1259 OID 16512)
+-- Name: idx_39986e435fd86d04; Type: INDEX; Schema: public; Owner: jan
+--
+
+CREATE INDEX idx_39986e435fd86d04 ON public.album USING btree (userid);
+
+
+--
+-- TOC entry 3452 (class 1259 OID 16494)
+-- Name: idx_5c51b18b6b3ca4b; Type: INDEX; Schema: public; Owner: jan
+--
+
+CREATE INDEX idx_5c51b18b6b3ca4b ON public.fotka USING btree (id_user);
+
+
+--
+-- TOC entry 3453 (class 1259 OID 16495)
+-- Name: idx_5c51b18bd71d2f73; Type: INDEX; Schema: public; Owner: jan
+--
+
+CREATE INDEX idx_5c51b18bd71d2f73 ON public.fotka USING btree (id_album);
+
+
+--
+-- TOC entry 3461 (class 1259 OID 16522)
+-- Name: neco; Type: INDEX; Schema: public; Owner: jan
+--
+
+CREATE UNIQUE INDEX neco ON public.useralb USING btree (id_user, id_album);
+
+
+--
+-- TOC entry 3467 (class 2606 OID 16538)
+-- Name: useralb fk_1d8f4a7f6b3ca4b; Type: FK CONSTRAINT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public.useralb
+    ADD CONSTRAINT fk_1d8f4a7f6b3ca4b FOREIGN KEY (id_user) REFERENCES public."user"(id);
+
+
+--
+-- TOC entry 3468 (class 2606 OID 16543)
+-- Name: useralb fk_1d8f4a7fd71d2f73; Type: FK CONSTRAINT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public.useralb
+    ADD CONSTRAINT fk_1d8f4a7fd71d2f73 FOREIGN KEY (id_album) REFERENCES public.album(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3466 (class 2606 OID 16533)
+-- Name: album fk_39986e435fd86d04; Type: FK CONSTRAINT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public.album
+    ADD CONSTRAINT fk_39986e435fd86d04 FOREIGN KEY (userid) REFERENCES public."user"(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 3464 (class 2606 OID 16523)
+-- Name: fotka fk_5c51b18b6b3ca4b; Type: FK CONSTRAINT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public.fotka
+    ADD CONSTRAINT fk_5c51b18b6b3ca4b FOREIGN KEY (id_user) REFERENCES public."user"(id) ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 3465 (class 2606 OID 16528)
+-- Name: fotka fk_5c51b18bd71d2f73; Type: FK CONSTRAINT; Schema: public; Owner: jan
+--
+
+ALTER TABLE ONLY public.fotka
+    ADD CONSTRAINT fk_5c51b18bd71d2f73 FOREIGN KEY (id_album) REFERENCES public.album(id) ON DELETE SET NULL;
+
+
+-- Completed on 2022-08-22 11:59:38 CEST
+
+--
+-- PostgreSQL database dump complete
+--
+

@@ -1,0 +1,8 @@
+runtime: php74
+entrypoint: serve www/index.php
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+
