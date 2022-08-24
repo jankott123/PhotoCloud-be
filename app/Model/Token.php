@@ -7,76 +7,49 @@ use PDO;
 
 
 class Token
-
-
 {
 
-    public function generateTokens($id, $username){
+    private  $secret_key;
+    private  $secret_key2;
+    private $issuer_claim;
+    private $audience_claim;
+    private $issuedat_claim;
 
-        $secret_key = $_ENV['SECRET_KEY'];
-        $secret_key2 = $_ENV['SECRET_KEY2'];
-        $issuer_claim = "THE_ISSUER"; // this can be the servername
-        $audience_claim = "THE_AUDIENCE";
-        $issuedat_claim = time(); // issued at
-        $notbefore_claim = $issuedat_claim; //not before in seconds
-        $expire_claim = $issuedat_claim + 25000000; // expire time in seconds
-        $expire_claim2 = $issuedat_claim + 11;
+
+    public function __construct()
+    {
+        $this->secret_key = $_ENV['SECRET_KEY'];
+        $this->secret_key2 = $_ENV['SECRET_KEY2'];
+        $this->issuer_claim =  "THE_ISSUER";
+        $this->audience_claim = "THE_AUDIENCE";
+        $this->issuedat_claim = time();
+    }
+
+    public function generateTokens($id, $username)
+    {
+
+        $refreshToken = $this->createToken($id, $username, 25000000, $this->secret_key);
+        $accessToken = $this->createToken($id, $username, 11, $this->secret_key2);
+
+
+        return array('refresh' => $refreshToken, 'access' => $accessToken);
+    }
+
+    public function createToken($id, $username, $exp_time, $secret_key)
+    {
+
         $token = array(
-            "iss" => "$issuer_claim",
-            "aud" => $audience_claim,
-            "iat" => $issuedat_claim,
-            "nbf" => $notbefore_claim,
-            "exp" => $expire_claim,
+            "iss" => $this->issuer_claim,
+            "aud" => $this->audience_claim,
+            "iat" => $this->issuedat_claim,
+            "nbf" => $this->issuedat_claim,
+            "exp" => $this->issuedat_claim + $exp_time,
             "data" => array(
                 "id" => $id,
                 "username" => $username,
             )
         );
 
-        $token2 = array(
-            "iss" => "$issuer_claim",
-            "aud" => $audience_claim,
-            "iat" => $issuedat_claim,
-            "nbf" => $notbefore_claim,
-            "exp" => $expire_claim2,
-            "data" => array(
-                "id" => $id,
-                "username" => $username,
-            )
-        );
-
-        $refreshToken = JWT::encode($token, $secret_key);
-        $accessToken = JWT::encode($token2, $secret_key2);
-
-
-        return array('refresh'=>$refreshToken, 'access'=>$accessToken);
-
+        return JWT::encode($token, $secret_key);
     }
-
-    public function generateAccessToken($id, $username){
-
-
-        
-        $issuer_claim = "THE_ISSUER"; // this can be the servername
-        $audience_claim = "THE_AUDIENCE";
-        $issuedat_claim = time(); // issued at
-        $notbefore_claim = $issuedat_claim; //not before in seconds
-        $expire_claim = $issuedat_claim + 25000000; // expire time in seconds
-        $expire_claim2 = $issuedat_claim + 11;
-
-        $token2 = array(
-            "iss" => "$issuer_claim",
-            "aud" => $audience_claim,
-            "iat" => $issuedat_claim,
-            "nbf" => $notbefore_claim,
-            "exp" => $expire_claim2,
-            "data" => array(
-                "id" => $id,
-                "username" => $username,
-            )
-        );
-        
-        return $token2;
-    }
-
 }

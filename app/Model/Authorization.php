@@ -67,9 +67,9 @@ class Authorization
             $result = $this->manager->checkId($data->data->id);
 
             $secret_key2 = $_ENV['SECRET_KEY2'];
-            $token2 = $this->token->generateAccessToken($result['id'], $result['username']);
+            $accessToken = $this->token->createToken($result['id'], $result['username'],11, $secret_key2);
 
-            $accessToken = JWT::encode($token2, $secret_key2);
+          //  $accessToken = JWT::encode($token2, $secret_key2);
 
             $cookie_options1 = array(
                 'expires' => time() + 11,
